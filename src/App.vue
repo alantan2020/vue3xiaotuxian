@@ -1,50 +1,21 @@
 <script setup>
-import Edit from './components/Edit.vue'
-import axios from 'axios';
-import { onMounted, ref } from 'vue';
+//1.导入 use打头的方法
+import { useCounterStore} from '@/stores/counter'
 
-// TODO: 列表渲染
-const list = ref([])
-const getList = async () => {
-  const res = await axios.get('/list')
-  list.value =res.data
-}
-onMounted(() => getList())
+//2.执行方法得到store实例对象
+const counterStore = useCounterStore()
 
-// TODO: 删除功能
-const onDelete = async (id) => {
-  await axios.delete(`/del/${id}`)
-  getList()
-}
-
-// TODO: 编辑功能
-const editRef = ref(null)
-const onEdit = (row) => {
-  editRef.value.open(row)
-}
 
 </script>
 
 <template>
-  <div class="app">
-    <el-table :data="list">
-      <el-table-column label="ID" prop="id"></el-table-column>
-      <el-table-column label="姓名" prop="name" width="150"></el-table-column>
-      <el-table-column label="籍贯" prop="place"></el-table-column>
-      <el-table-column label="操作" width="150">
-        <template #default="{ row }">
-          <el-button type="primary" @click="onEdit(row)" link>编辑</el-button>
-          <el-button type="danger" @click="onDelete(row.id)" link>删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
-  <Edit  ref="editRef"/>
+<button @click="counterStore.increment" >{{ counterStore.count }}</button>
+<h1>没有包括GST的价钱{{ counterStore.count }}</h1>
+<h1>{{ counterStore.doubleCount }}</h1>
+-------
+<h1>GST {{ counterStore.GST }}</h1>
+<h1> totlePrice {{  counterStore.totlePrice }}</h1>
 </template>
 
 <style scoped>
-.app {
-  width: 980px;
-  margin: 100px auto 0;
-}
 </style>
