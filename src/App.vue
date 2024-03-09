@@ -31,9 +31,11 @@ const onDelete = async(id) => {
 
 //1.打开弹窗(获取子组件实例，调用方法，修改属性)
 const editRef = ref(null)
-const onEdit = () => {
-  editRef.value.open()
+const onEdit = (row) => {
+  editRef.value.open(row)
 }
+
+//2.调用数据（调用详情接口 / 当前行的静态数据）
 
 
 </script>
@@ -46,7 +48,7 @@ const onEdit = () => {
       <el-table-column label="籍贯" prop="place"></el-table-column>
       <el-table-column label="操作" width="150">
         <template #default="{ row }">
-          <el-button type="primary" @click="onEdit" link>编辑</el-button>
+          <el-button type="primary" @click="onEdit(row)" link>编辑</el-button>
           <el-button type="danger" @click="onDelete(row.id)" link>删除</el-button>
         </template>
       </el-table-column>
