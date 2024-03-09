@@ -54,7 +54,7 @@ const onEdit = (row) => {
       </el-table-column>
     </el-table>
   </div>
-  <Edit ref="editRef"/>
+  <Edit ref="editRef" @on-update="getList"/>
 </template>
 
 <style scoped>

@@ -1,4 +1,6 @@
 <script setup>
+import axios from 'axios';
+const emit = defineEmits(['on-update'])
 // TODO: 编辑
 import { ref } from 'vue'
 // 弹框开关
@@ -7,13 +9,31 @@ const dialogVisible = ref(false)
 //准备form
 const form = ref({
   name: '',
-  place: ''
+  place: '',
+  id: ''
 })
 const open = (row) => { 
   form.value.name = row.name
   form.value.place = row.place
+  form.value.id = row.id
+  
   dialogVisible.value = true }
 defineExpose({ open })
+
+//更新
+const onUpdate = async () => {
+  //1。收集表数据，调用接口
+  await axios.patch(`/edit/${form.value.id}`, {
+  name: form.value.name,
+  place: form.value.place,
+})
+  //2。关闭弹框
+  dialogVisible.value = false
+
+  //3.通知父组件做列表的更新
+  emit('on-update')
+
+}
 
 
 </script>
@@ -31,7 +51,7 @@ defineExpose({ open })
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确认</el-button>
+        <el-button type="primary" @click="onUpdate">确认</el-button>
       </span>
     </template>
   </el-dialog>
