@@ -1,21 +1,49 @@
 <script setup>
-//1.导入 use打头的方法
-import { useCounterStore} from '@/stores/counter'
+import { onMounted, ref } from 'vue';
+import Edit from './components/Edit.vue'
+import axios from 'axios';
 
-//2.执行方法得到store实例对象
-const counterStore = useCounterStore()
+// TODO: 列表渲染
+// 思路：声明一个响应式list -> 调用接口获取数据 -> 后端数据赋值给list -> 绑定到table 组件上
 
+const list = ref([])
+const getList = async() => {
+  // 接口调用
+ const res =await axios.get('/list')
+ //交给list
+ list.value = res.data
+}
+
+onMounted(() => getList() )
+
+
+// TODO: 删除功能
+
+
+// TODO: 编辑功能
 
 </script>
 
 <template>
-<button @click="counterStore.increment" >{{ counterStore.count }}</button>
-<h1>没有包括GST的价钱{{ counterStore.count }}</h1>
-<h1>{{ counterStore.doubleCount }}</h1>
--------
-<h1>GST {{ counterStore.GST }}</h1>
-<h1> totlePrice {{  counterStore.totlePrice }}</h1>
+  <div class="app">
+    <el-table :data="list">
+      <el-table-column label="ID" prop="id"></el-table-column>
+      <el-table-column label="姓名" prop="name" width="150"></el-table-column>
+      <el-table-column label="籍贯" prop="place"></el-table-column>
+      <el-table-column label="操作" width="150">
+        <template #default>
+          <el-button type="primary" link>编辑</el-button>
+          <el-button type="danger" link>删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+  <Edit />
 </template>
 
 <style scoped>
+.app {
+  width: 980px;
+  margin: 100px auto 0;
+}
 </style>
